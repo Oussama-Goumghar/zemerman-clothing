@@ -19,7 +19,6 @@ import {createStructuredSelector} from 'reselect'
 import {selectCurrentUser} from './redux/user/user.selectors'
 
 
-
 class App extends React.Component{
 
 
@@ -28,20 +27,22 @@ class App extends React.Component{
     componentDidMount(){
         const {setCurrentUser} = this.props;
 
-      this.unsubscribeFromAuth=auth.onAuthStateChanged(async userAuth=>{
-          if (userAuth){
-              const userRef=await createUserProfileDocument(userAuth);
 
-              userRef.onSnapshot(snapshot => {
-                  setCurrentUser({
-                              id: snapshot.id,
-                              ...snapshot.data()
+        this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+            if (userAuth) {
+                const userRef = await createUserProfileDocument(userAuth);
 
-                      });
-              })
-          }else {
-              setCurrentUser(userAuth)
-          }
+                userRef.onSnapshot(snapshot => {
+                    setCurrentUser({
+                        id: snapshot.id,
+                        ...snapshot.data()
+
+                    });
+                });
+            } else {
+                setCurrentUser(userAuth)
+            }
+
 
         });
 
@@ -68,9 +69,9 @@ class App extends React.Component{
 
 }
 
-const mapStateToProps=createStructuredSelector({
-    currentUser:selectCurrentUser
-})
+const mapStateToProps = createStructuredSelector({
+    currentUser: selectCurrentUser,
+});
 
 const mapDispatchToProps = dispatch =>({
     setCurrentUser : user =>dispatch(setCurrentUser(user))
